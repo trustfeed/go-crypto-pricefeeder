@@ -1,5 +1,5 @@
 # go-crypto-pricefeeder
-A cryptocurrency trading bot supporting multiple exchanges written in Golang.
+A cryptocurrency price feeder supporting multiple exchanges written in Golang.
 
 ## Exchange Support Table
 
