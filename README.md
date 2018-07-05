@@ -77,12 +77,12 @@ go get -u github.com/golang/dep/cmd/dep
 After `dep` is installed, please follow the instructions below:
 
 ```bash
-go get github.com/thrasher-/gocryptotrader
-cd $GOPATH/src/github.com/thrasher-/gocryptotrader
+go get github.com/trustfeed/go-crypto-pricefeeder
+cd $GOPATH/src/github.com/trustfeed/go-crypto-pricefeeder
 make get
 make install
-cp $GOPATH/src/github.com/thrasher-/gocryptotrader/config_example.json $GOPATH/bin/config.json
+cp $GOPATH/src/github.com/trustfeed/go-crypto-pricefeeder/config_example.json $GOPATH/bin/config.json
 ```
 
 + Make any neccessary changes to the `config.json` file.
-+ Run the `gocryptotrader` binary file inside your GOPATH bin folder.
++ Run the `go-crypto-pricefeeder` binary file inside your GOPATH bin folder.
