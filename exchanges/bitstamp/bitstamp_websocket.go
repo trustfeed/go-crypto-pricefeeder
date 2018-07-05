@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/thrasher-/gocryptotrader/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
 	"github.com/toorop/go-pusher"
 )
 

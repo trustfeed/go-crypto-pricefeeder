@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/thrasher-/gocryptotrader/exchanges"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges"
 )
 
 // RESTLogger logs the requests internally

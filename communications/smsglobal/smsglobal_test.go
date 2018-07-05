@@ -4,8 +4,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/thrasher-/gocryptotrader/communications/base"
-	"github.com/thrasher-/gocryptotrader/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications/base"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
 )
 
 var s SMSGlobal

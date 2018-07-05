@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thrasher-/gocryptotrader/common"
-	"github.com/thrasher-/gocryptotrader/exchanges/ticker"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/ticker"
 )
 
 //global vars contain staged update data that will be sent to the communication

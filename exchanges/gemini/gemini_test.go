@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/thrasher-/gocryptotrader/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
 )
 
 // Please enter sandbox API keys & assigned roles for better testing procedures

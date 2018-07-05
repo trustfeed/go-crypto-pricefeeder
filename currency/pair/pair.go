@@ -3,7 +3,7 @@ package pair
 import (
 	"strings"
 
-	"github.com/thrasher-/gocryptotrader/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
 )
 
 // CurrencyItem is an exported string with methods to manipulate the data instead

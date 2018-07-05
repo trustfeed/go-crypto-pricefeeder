@@ -5,11 +5,11 @@ package forexprovider
 import (
 	"log"
 
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider/base"
-	currencyconverter "github.com/thrasher-/gocryptotrader/currency/forexprovider/currencyconverterapi"
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider/currencylayer"
-	fixer "github.com/thrasher-/gocryptotrader/currency/forexprovider/fixer.io"
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider/openexchangerates"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/base"
+	currencyconverter "github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/currencyconverterapi"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/currencylayer"
+	fixer "github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/fixer.io"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/openexchangerates"
 )
 
 // ForexProviders is an array of foreign exchange interfaces

@@ -11,12 +11,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thrasher-/gocryptotrader/common"
-	"github.com/thrasher-/gocryptotrader/currency"
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider"
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider/base"
-	"github.com/thrasher-/gocryptotrader/currency/pair"
-	"github.com/thrasher-/gocryptotrader/portfolio"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/base"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/pair"
+	"github.com/trustfeed/go-crypto-pricefeeder/portfolio"
 )
 
 // Constants declared here are filename strings and test strings

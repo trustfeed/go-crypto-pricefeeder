@@ -11,14 +11,14 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/thrasher-/gocryptotrader/currency"
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider"
 
-	"github.com/thrasher-/gocryptotrader/common"
-	"github.com/thrasher-/gocryptotrader/communications"
-	"github.com/thrasher-/gocryptotrader/config"
-	"github.com/thrasher-/gocryptotrader/exchanges"
-	"github.com/thrasher-/gocryptotrader/portfolio"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges"
+	"github.com/trustfeed/go-crypto-pricefeeder/portfolio"
 )
 
 // Bot contains configuration, portfolio, exchange & ticker data and is the

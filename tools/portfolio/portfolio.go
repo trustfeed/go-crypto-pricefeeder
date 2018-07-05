@@ -6,12 +6,12 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/thrasher-/gocryptotrader/common"
-	"github.com/thrasher-/gocryptotrader/config"
-	"github.com/thrasher-/gocryptotrader/currency"
-	"github.com/thrasher-/gocryptotrader/currency/symbol"
-	"github.com/thrasher-/gocryptotrader/exchanges/bitfinex"
-	"github.com/thrasher-/gocryptotrader/portfolio"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/symbol"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/bitfinex"
+	"github.com/trustfeed/go-crypto-pricefeeder/portfolio"
 )
 
 var (

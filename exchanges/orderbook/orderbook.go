@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thrasher-/gocryptotrader/currency/pair"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/pair"
 )
 
 // Const values for orderbook package

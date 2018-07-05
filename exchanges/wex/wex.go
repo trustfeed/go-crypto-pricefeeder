@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/thrasher-/gocryptotrader/common"
-	"github.com/thrasher-/gocryptotrader/config"
-	exchange "github.com/thrasher-/gocryptotrader/exchanges"
-	"github.com/thrasher-/gocryptotrader/exchanges/request"
-	"github.com/thrasher-/gocryptotrader/exchanges/ticker"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
+	exchange "github.com/trustfeed/go-crypto-pricefeeder/exchanges"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/request"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/ticker"
 )
 
 const (

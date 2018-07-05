@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/thrasher-/gocryptotrader/config"
-	"github.com/thrasher-/gocryptotrader/currency/pair"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/pair"
 )
 
 var l Liqui

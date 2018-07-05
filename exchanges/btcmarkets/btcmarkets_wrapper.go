@@ -5,12 +5,12 @@ import (
 	"log"
 	"sync"
 
-	"github.com/thrasher-/gocryptotrader/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
 
-	"github.com/thrasher-/gocryptotrader/currency/pair"
-	"github.com/thrasher-/gocryptotrader/exchanges"
-	"github.com/thrasher-/gocryptotrader/exchanges/orderbook"
-	"github.com/thrasher-/gocryptotrader/exchanges/ticker"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/pair"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/orderbook"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/ticker"
 )
 
 // Start starts the BTC Markets go routine

@@ -14,8 +14,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/thrasher-/gocryptotrader/common"
-	"github.com/thrasher-/gocryptotrader/currency/forexprovider/base"
+	"github.com/trustfeed/go-crypto-pricefeeder/common"
+	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider/base"
 )
 
 // These consts contain endpoint information

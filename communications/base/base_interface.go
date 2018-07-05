@@ -4,9 +4,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/thrasher-/gocryptotrader/config"
-	"github.com/thrasher-/gocryptotrader/exchanges/orderbook"
-	"github.com/thrasher-/gocryptotrader/exchanges/ticker"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/orderbook"
+	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/ticker"
 )
 
 // IComm is the main interface array across the communication packages

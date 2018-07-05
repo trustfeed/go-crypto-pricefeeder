@@ -1,12 +1,12 @@
 package communications
 
 import (
-	"github.com/thrasher-/gocryptotrader/communications/base"
-	"github.com/thrasher-/gocryptotrader/communications/slack"
-	"github.com/thrasher-/gocryptotrader/communications/smsglobal"
-	"github.com/thrasher-/gocryptotrader/communications/smtpservice"
-	"github.com/thrasher-/gocryptotrader/communications/telegram"
-	"github.com/thrasher-/gocryptotrader/config"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications/base"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications/slack"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications/smsglobal"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications/smtpservice"
+	"github.com/trustfeed/go-crypto-pricefeeder/communications/telegram"
+	"github.com/trustfeed/go-crypto-pricefeeder/config"
 )
 
 // Communications is the overarching type across the communications packages
