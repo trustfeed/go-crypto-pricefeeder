@@ -79,8 +79,8 @@ After `dep` is installed, please follow the instructions below:
 ```bash
 go get github.com/trustfeed/go-crypto-pricefeeder
 cd $GOPATH/src/github.com/trustfeed/go-crypto-pricefeeder
-make get
-make install
+dep ensure
+go install
 cp $GOPATH/src/github.com/trustfeed/go-crypto-pricefeeder/config_example.json $GOPATH/bin/config.json
 ```
 
