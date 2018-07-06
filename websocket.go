@@ -384,7 +384,7 @@ func wsGetTicker(client *WebsocketClient, data interface{}) error {
 		return err
 	}
 
-	result, err := GetSpecificTicker(tickerReq.Currency,
+	result, err := GetSpecificTicker(bot, tickerReq.Currency,
 		tickerReq.Exchange, tickerReq.AssetType)
 
 	if err != nil {
@@ -416,7 +416,7 @@ func wsGetOrderbook(client *WebsocketClient, data interface{}) error {
 		return err
 	}
 
-	result, err := GetSpecificOrderbook(orderbookReq.Currency,
+	result, err := GetSpecificOrderbook(bot, orderbookReq.Currency,
 		orderbookReq.Exchange, orderbookReq.AssetType)
 
 	if err != nil {

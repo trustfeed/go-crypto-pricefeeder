@@ -99,7 +99,7 @@ func RESTGetOrderbook(w http.ResponseWriter, r *http.Request) {
 		assetType = orderbook.Spot
 	}
 
-	response, err := GetSpecificOrderbook(currency, exchange, assetType)
+	response, err := GetSpecificOrderbook(bot, currency, exchange, assetType)
 	if err != nil {
 		log.Printf("Failed to fetch orderbook for %s currency: %s\n", exchange,
 			currency)
@@ -191,7 +191,7 @@ func RESTGetTicker(w http.ResponseWriter, r *http.Request) {
 	if assetType == "" {
 		assetType = ticker.Spot
 	}
-	response, err := GetSpecificTicker(currency, exchange, assetType)
+	response, err := GetSpecificTicker(bot, currency, exchange, assetType)
 	if err != nil {
 		log.Printf("Failed to fetch ticker for %s currency: %s\n", exchange,
 			currency)
