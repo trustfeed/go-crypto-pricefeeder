@@ -17,29 +17,21 @@ import (
 	"github.com/trustfeed/go-crypto-pricefeeder/common"
 	"github.com/trustfeed/go-crypto-pricefeeder/communications"
 	"github.com/trustfeed/go-crypto-pricefeeder/config"
-	"github.com/trustfeed/go-crypto-pricefeeder/exchanges"
 	"github.com/trustfeed/go-crypto-pricefeeder/portfolio"
 )
 
-// Bot contains configuration, portfolio, exchange & ticker data and is the
-// overarching type across this code base.
-type Bot struct {
-	config     *config.Config
-	portfolio  *portfolio.Base
-	exchanges  []exchange.IBotExchange
-	comms      *communications.Communications
-	shutdown   chan bool
-	dryRun     bool
-	configFile string
-}
-
 const banner = `
-   ______        ______                     __        ______                  __
-  / ____/____   / ____/_____ __  __ ____   / /_ ____ /_  __/_____ ______ ____/ /___   _____
- / / __ / __ \ / /    / ___// / / // __ \ / __// __ \ / /  / ___// __  // __  // _ \ / ___/
-/ /_/ // /_/ // /___ / /   / /_/ // /_/ // /_ / /_/ // /  / /   / /_/ // /_/ //  __// /
-\____/ \____/ \____//_/    \__, // .___/ \__/ \____//_/  /_/    \__,_/ \__,_/ \___//_/
-                          /____//_/
+   ____   ____             ___________ ___.__._______/  |_  ____           
+  / ___\ /  _ \   ______ _/ ___\_  __ <   |  |\____ \   __\/  _ \   ______ 
+ / /_/  >  <_> ) /_____/ \  \___|  | \/\___  ||  |_> >  | (  <_> ) /_____/ 
+ \___  / \____/           \___  >__|   / ____||   __/|__|  \____/          
+/_____/                       \/       \/     |__|                         
+             .__              _____                .___                    
+_____________|__| ____  _____/ ____\____  ____   __| _/___________         
+\____ \_  __ \  |/ ___\/ __ \   __\/ __ \/ __ \ / __ |/ __ \_  __ \        
+|  |_> >  | \/  \  \__\  ___/|  | \  ___|  ___// /_/ \  ___/|  | \/        
+|   __/|__|  |__|\___  >___  >__|  \___  >___  >____ |\___  >__|           
+|__|                 \/    \/          \/    \/     \/    \/               
 `
 
 var bot Bot
