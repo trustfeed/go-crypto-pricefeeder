@@ -5,6 +5,7 @@ import (
 	"log"
 	"sync"
 
+	Bot "github.com/trustfeed/go-crypto-pricefeeder/bot"
 	"github.com/trustfeed/go-crypto-pricefeeder/common"
 	exchange "github.com/trustfeed/go-crypto-pricefeeder/exchanges"
 	"github.com/trustfeed/go-crypto-pricefeeder/exchanges/anx"
@@ -44,9 +45,9 @@ var (
 
 // CheckExchangeExists returns true whether or not an exchange has already
 // been loaded
-func CheckExchangeExists(exchName string) bool {
-	for x := range bot.exchanges {
-		if common.StringToLower(bot.exchanges[x].GetName()) == common.StringToLower(exchName) {
+func CheckExchangeExists(bot Bot.Bot, exchName string) bool {
+	for x := range bot.Exchanges {
+		if common.StringToLower(bot.Exchanges[x].GetName()) == common.StringToLower(exchName) {
 			return true
 		}
 	}
@@ -54,65 +55,65 @@ func CheckExchangeExists(exchName string) bool {
 }
 
 // GetExchangeByName returns an exchange given an exchange name
-func GetExchangeByName(exchName string) exchange.IBotExchange {
-	for x := range bot.exchanges {
-		if common.StringToLower(bot.exchanges[x].GetName()) == common.StringToLower(exchName) {
-			return bot.exchanges[x]
+func GetExchangeByName(bot Bot.Bot, exchName string) exchange.IBotExchange {
+	for x := range bot.Exchanges {
+		if common.StringToLower(bot.Exchanges[x].GetName()) == common.StringToLower(exchName) {
+			return bot.Exchanges[x]
 		}
 	}
 	return nil
 }
 
 // ReloadExchange loads an exchange config by name
-func ReloadExchange(name string) error {
+func ReloadExchange(bot Bot.Bot, name string) error {
 	nameLower := common.StringToLower(name)
 
-	if len(bot.exchanges) == 0 {
+	if len(bot.Exchanges) == 0 {
 		return ErrNoExchangesLoaded
 	}
 
-	if !CheckExchangeExists(nameLower) {
+	if !CheckExchangeExists(bot, nameLower) {
 		return ErrExchangeNotFound
 	}
 
-	exchCfg, err := bot.config.GetExchangeConfig(name)
+	exchCfg, err := bot.Config.GetExchangeConfig(name)
 	if err != nil {
 		return err
 	}
 
-	e := GetExchangeByName(nameLower)
+	e := GetExchangeByName(bot, nameLower)
 	e.Setup(exchCfg)
 	log.Printf("%s exchange reloaded successfully.\n", name)
 	return nil
 }
 
 // UnloadExchange unloads an exchange by
-func UnloadExchange(name string) error {
+func UnloadExchange(bot Bot.Bot, name string) error {
 	nameLower := common.StringToLower(name)
 
-	if len(bot.exchanges) == 0 {
+	if len(bot.Exchanges) == 0 {
 		return ErrNoExchangesLoaded
 	}
 
-	if !CheckExchangeExists(nameLower) {
+	if !CheckExchangeExists(bot, nameLower) {
 		return ErrExchangeNotFound
 	}
 
-	exchCfg, err := bot.config.GetExchangeConfig(name)
+	exchCfg, err := bot.Config.GetExchangeConfig(name)
 	if err != nil {
 		return err
 	}
 
 	exchCfg.Enabled = false
-	err = bot.config.UpdateExchangeConfig(exchCfg)
+	err = bot.Config.UpdateExchangeConfig(exchCfg)
 	if err != nil {
 		return err
 	}
 
-	for x := range bot.exchanges {
-		if bot.exchanges[x].GetName() == name {
-			bot.exchanges[x].SetEnabled(false)
-			bot.exchanges = append(bot.exchanges[:x], bot.exchanges[x+1:]...)
+	for x := range bot.Exchanges {
+		if bot.Exchanges[x].GetName() == name {
+			bot.Exchanges[x].SetEnabled(false)
+			bot.Exchanges = append(bot.Exchanges[:x], bot.Exchanges[x+1:]...)
 			return nil
 		}
 	}
@@ -121,12 +122,12 @@ func UnloadExchange(name string) error {
 }
 
 // LoadExchange loads an exchange by name
-func LoadExchange(name string, useWG bool, wg *sync.WaitGroup) error {
+func LoadExchange(bot Bot.Bot, name string, useWG bool, wg *sync.WaitGroup) error {
 	nameLower := common.StringToLower(name)
 	var exch exchange.IBotExchange
 
-	if len(bot.exchanges) > 0 {
-		if CheckExchangeExists(nameLower) {
+	if len(bot.Exchanges) > 0 {
+		if CheckExchangeExists(bot, nameLower) {
 			return ErrExchangeAlreadyLoaded
 		}
 	}
@@ -193,8 +194,8 @@ func LoadExchange(name string, useWG bool, wg *sync.WaitGroup) error {
 	}
 
 	exch.SetDefaults()
-	bot.exchanges = append(bot.exchanges, exch)
-	exchCfg, err := bot.config.GetExchangeConfig(name)
+	bot.Exchanges = append(bot.Exchanges, exch)
+	exchCfg, err := bot.Config.GetExchangeConfig(name)
 	if err != nil {
 		return err
 	}
@@ -213,24 +214,24 @@ func LoadExchange(name string, useWG bool, wg *sync.WaitGroup) error {
 }
 
 // SetupExchanges sets up the exchanges used by the bot
-func SetupExchanges() {
+func SetupExchanges(bot Bot.Bot) {
 	var wg sync.WaitGroup
-	for _, exch := range bot.config.Exchanges {
-		if CheckExchangeExists(exch.Name) {
-			e := GetExchangeByName(exch.Name)
+	for _, exch := range bot.Config.Exchanges {
+		if CheckExchangeExists(bot, exch.Name) {
+			e := GetExchangeByName(bot, exch.Name)
 			if e == nil {
 				log.Println(ErrExchangeNotFound)
 				continue
 			}
 
-			err := ReloadExchange(exch.Name)
+			err := ReloadExchange(bot, exch.Name)
 			if err != nil {
 				log.Printf("ReloadExchange %s failed: %s", exch.Name, err)
 				continue
 			}
 
 			if !e.IsEnabled() {
-				UnloadExchange(exch.Name)
+				UnloadExchange(bot, exch.Name)
 				continue
 			}
 			return
@@ -240,7 +241,7 @@ func SetupExchanges() {
 			log.Printf("%s: Exchange support: Disabled", exch.Name)
 			continue
 		} else {
-			err := LoadExchange(exch.Name, true, &wg)
+			err := LoadExchange(bot, exch.Name, true, &wg)
 			if err != nil {
 				log.Printf("LoadExchange %s failed: %s", exch.Name, err)
 				continue

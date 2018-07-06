@@ -57,7 +57,7 @@ func RESTfulError(method string, err error) {
 // RESTGetAllSettings replies to a request with an encoded JSON response about the
 // trading bots configuration.
 func RESTGetAllSettings(w http.ResponseWriter, r *http.Request) {
-	err := RESTfulJSONResponse(w, r, bot.config)
+	err := RESTfulJSONResponse(w, r, bot.Config)
 	if err != nil {
 		RESTfulError(r.Method, err)
 	}
@@ -74,17 +74,17 @@ func RESTSaveAllSettings(w http.ResponseWriter, r *http.Request) {
 		RESTfulError(r.Method, err)
 	}
 	//Save change the settings
-	err = bot.config.UpdateConfig(bot.configFile, responseData.Data)
+	err = bot.Config.UpdateConfig(bot.ConfigFile, responseData.Data)
 	if err != nil {
 		RESTfulError(r.Method, err)
 	}
 
-	err = RESTfulJSONResponse(w, r, bot.config)
+	err = RESTfulJSONResponse(w, r, bot.Config)
 	if err != nil {
 		RESTfulError(r.Method, err)
 	}
 
-	SetupExchanges()
+	SetupExchanges(bot)
 }
 
 // RESTGetOrderbook returns orderbook info for a given currency, exchange and
@@ -116,7 +116,7 @@ func RESTGetOrderbook(w http.ResponseWriter, r *http.Request) {
 func GetAllActiveOrderbooks() []EnabledExchangeOrderbooks {
 	var orderbookData []EnabledExchangeOrderbooks
 
-	for _, individualBot := range bot.exchanges {
+	for _, individualBot := range bot.Exchanges {
 		if individualBot != nil && individualBot.IsEnabled() {
 			var individualExchange EnabledExchangeOrderbooks
 			exchangeName := individualBot.GetName()
@@ -173,7 +173,7 @@ func RESTGetAllActiveOrderbooks(w http.ResponseWriter, r *http.Request) {
 
 // RESTGetPortfolio returns the bot portfolio
 func RESTGetPortfolio(w http.ResponseWriter, r *http.Request) {
-	result := bot.portfolio.GetPortfolioSummary()
+	result := bot.Portfolio.GetPortfolioSummary()
 	err := RESTfulJSONResponse(w, r, result)
 	if err != nil {
 		RESTfulError(r.Method, err)
@@ -207,7 +207,7 @@ func RESTGetTicker(w http.ResponseWriter, r *http.Request) {
 func GetAllActiveTickers() []EnabledExchangeCurrencies {
 	var tickerData []EnabledExchangeCurrencies
 
-	for _, individualBot := range bot.exchanges {
+	for _, individualBot := range bot.Exchanges {
 		if individualBot != nil && individualBot.IsEnabled() {
 			var individualExchange EnabledExchangeCurrencies
 			exchangeName := individualBot.GetName()
@@ -264,7 +264,7 @@ func RESTGetAllActiveTickers(w http.ResponseWriter, r *http.Request) {
 // GetAllEnabledExchangeAccountInfo returns all the current enabled exchanges
 func GetAllEnabledExchangeAccountInfo() AllEnabledExchangeAccounts {
 	var response AllEnabledExchangeAccounts
-	for _, individualBot := range bot.exchanges {
+	for _, individualBot := range bot.Exchanges {
 		if individualBot != nil && individualBot.IsEnabled() {
 			if !individualBot.GetAuthenticatedAPISupport() {
 				log.Printf("GetAllEnabledExchangeAccountInfo: Skippping %s due to disabled authenticated API support.", individualBot.GetName())

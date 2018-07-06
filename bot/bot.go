@@ -1,4 +1,4 @@
-package main
+package bot
 
 import (
 	"github.com/trustfeed/go-crypto-pricefeeder/communications"
@@ -10,11 +10,11 @@ import (
 // Bot contains configuration, portfolio, exchange & ticker data and is the
 // overarching type across this code base.
 type Bot struct {
-	config     *config.Config
-	portfolio  *portfolio.Base
-	exchanges  []exchange.IBotExchange
-	comms      *communications.Communications
-	shutdown   chan bool
-	dryRun     bool
-	configFile string
+	Config     *config.Config
+	Portfolio  *portfolio.Base
+	Exchanges  []exchange.IBotExchange
+	Comms      *communications.Communications
+	Shutdown   chan bool
+	DryRun     bool
+	ConfigFile string
 }

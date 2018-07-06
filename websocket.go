@@ -251,7 +251,7 @@ func WebsocketClientHandler(w http.ResponseWriter, r *http.Request) {
 		StartWebsocketHandler()
 	}
 
-	connectionLimit := bot.config.Webserver.WebsocketConnectionLimit
+	connectionLimit := bot.Config.Webserver.WebsocketConnectionLimit
 	numClients := len(wsHub.Clients)
 
 	if numClients >= connectionLimit {
@@ -268,7 +268,7 @@ func WebsocketClientHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Allow insecure origin if the Origin request header is present and not
 	// equal to the Host request header. Default to false
-	if bot.config.Webserver.WebsocketAllowInsecureOrigin {
+	if bot.Config.Webserver.WebsocketAllowInsecureOrigin {
 		upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	}
 
@@ -300,8 +300,8 @@ func wsAuth(client *WebsocketClient, data interface{}) error {
 		return err
 	}
 
-	hashPW := common.HexEncodeToString(common.GetSHA256([]byte(bot.config.Webserver.AdminPassword)))
-	if auth.Username == bot.config.Webserver.AdminUsername && auth.Password == hashPW {
+	hashPW := common.HexEncodeToString(common.GetSHA256([]byte(bot.Config.Webserver.AdminPassword)))
+	if auth.Username == bot.Config.Webserver.AdminUsername && auth.Password == hashPW {
 		client.Authenticated = true
 		wsResp.Data = WebsocketResponseSuccess
 		log.Println("websocket: client authenticated successfully")
@@ -310,15 +310,15 @@ func wsAuth(client *WebsocketClient, data interface{}) error {
 		wsResp.Error = "invalid username/password"
 		client.authFailures++
 		client.SendWebsocketMessage(wsResp)
-		if client.authFailures >= bot.config.Webserver.WebsocketMaxAuthFailures {
+		if client.authFailures >= bot.Config.Webserver.WebsocketMaxAuthFailures {
 			log.Printf("websocket: disconnecting client, maximum auth failures threshold reached (failures: %d limit: %d)",
-				client.authFailures, bot.config.Webserver.WebsocketMaxAuthFailures)
+				client.authFailures, bot.Config.Webserver.WebsocketMaxAuthFailures)
 			wsHub.Unregister <- client
 			return nil
 		}
 
 		log.Printf("websocket: client sent wrong username/password (failures: %d limit: %d)",
-			client.authFailures, bot.config.Webserver.WebsocketMaxAuthFailures)
+			client.authFailures, bot.Config.Webserver.WebsocketMaxAuthFailures)
 		return nil
 	}
 }
@@ -326,7 +326,7 @@ func wsAuth(client *WebsocketClient, data interface{}) error {
 func wsGetConfig(client *WebsocketClient, data interface{}) error {
 	wsResp := WebsocketEventResponse{
 		Event: "GetConfig",
-		Data:  bot.config,
+		Data:  bot.Config,
 	}
 	return client.SendWebsocketMessage(wsResp)
 }
@@ -343,14 +343,14 @@ func wsSaveConfig(client *WebsocketClient, data interface{}) error {
 		return err
 	}
 
-	err = bot.config.UpdateConfig(bot.configFile, cfg)
+	err = bot.Config.UpdateConfig(bot.ConfigFile, cfg)
 	if err != nil {
 		wsResp.Error = err.Error()
 		client.SendWebsocketMessage(wsResp)
 		return err
 	}
 
-	SetupExchanges()
+	SetupExchanges(bot)
 	wsResp.Data = WebsocketResponseSuccess
 	return client.SendWebsocketMessage(wsResp)
 }
@@ -440,6 +440,6 @@ func wsGetPortfolio(client *WebsocketClient, data interface{}) error {
 	wsResp := WebsocketEventResponse{
 		Event: "GetPortfolio",
 	}
-	wsResp.Data = bot.portfolio.GetPortfolioSummary()
+	wsResp.Data = bot.Portfolio.GetPortfolioSummary()
 	return client.SendWebsocketMessage(wsResp)
 }

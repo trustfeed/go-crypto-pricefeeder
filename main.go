@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"syscall"
 
+	Bot "github.com/trustfeed/go-crypto-pricefeeder/bot"
 	"github.com/trustfeed/go-crypto-pricefeeder/currency"
 	"github.com/trustfeed/go-crypto-pricefeeder/currency/forexprovider"
 
@@ -34,10 +35,10 @@ _____________|__| ____  _____/ ____\____  ____   __| _/___________
 |__|                 \/    \/          \/    \/     \/    \/               
 `
 
-var bot Bot
+var bot Bot.Bot
 
 func main() {
-	bot.shutdown = make(chan bool)
+	bot.Shutdown = make(chan bool)
 	HandleInterrupt()
 
 	defaultPath, err := config.GetFilePath("")
@@ -46,7 +47,7 @@ func main() {
 	}
 
 	//Handle flags
-	flag.StringVar(&bot.configFile, "config", defaultPath, "config file to load")
+	flag.StringVar(&bot.ConfigFile, "config", defaultPath, "config file to load")
 	dryrun := flag.Bool("dryrun", false, "dry runs bot, doesn't save config file")
 	version := flag.Bool("version", false, "retrieves current GoCryptoTrader version")
 	flag.Parse()
@@ -57,44 +58,44 @@ func main() {
 	}
 
 	if *dryrun {
-		bot.dryRun = true
+		bot.DryRun = true
 	}
 
-	bot.config = &config.Cfg
+	bot.Config = &config.Cfg
 	fmt.Println(banner)
 	fmt.Println(BuildVersion(false))
-	log.Printf("Loading config file %s..\n", bot.configFile)
+	log.Printf("Loading config file %s..\n", bot.ConfigFile)
 
-	err = bot.config.LoadConfig(bot.configFile)
+	err = bot.Config.LoadConfig(bot.ConfigFile)
 	if err != nil {
 		log.Fatalf("Failed to load config. Err: %s", err)
 	}
 
 	AdjustGoMaxProcs()
-	log.Printf("Bot '%s' started.\n", bot.config.Name)
-	log.Printf("Bot dry run mode: %v.\n", common.IsEnabled(bot.dryRun))
+	log.Printf("Bot '%s' started.\n", bot.Config.Name)
+	log.Printf("Bot dry run mode: %v.\n", common.IsEnabled(bot.DryRun))
 
 	log.Printf("Available Exchanges: %d. Enabled Exchanges: %d.\n",
-		len(bot.config.Exchanges),
-		bot.config.CountEnabledExchanges())
+		len(bot.Config.Exchanges),
+		bot.Config.CountEnabledExchanges())
 
-	common.HTTPClient = common.NewHTTPClientWithTimeout(bot.config.GlobalHTTPTimeout)
+	common.HTTPClient = common.NewHTTPClientWithTimeout(bot.Config.GlobalHTTPTimeout)
 	log.Printf("Global HTTP request timeout: %v.\n", common.HTTPClient.Timeout)
 
-	SetupExchanges()
-	if len(bot.exchanges) == 0 {
+	SetupExchanges(bot)
+	if len(bot.Exchanges) == 0 {
 		log.Fatalf("No exchanges were able to be loaded. Exiting")
 	}
 
 	log.Println("Starting communication mediums..")
-	bot.comms = communications.NewComm(bot.config.GetCommunicationsConfig())
-	bot.comms.GetEnabledCommunicationMediums()
+	bot.Comms = communications.NewComm(bot.Config.GetCommunicationsConfig())
+	bot.Comms.GetEnabledCommunicationMediums()
 
-	log.Printf("Fiat display currency: %s.", bot.config.Currency.FiatDisplayCurrency)
-	currency.BaseCurrency = bot.config.Currency.FiatDisplayCurrency
-	currency.FXProviders = forexprovider.StartFXService(bot.config.GetCurrencyConfig().ForexProviders)
-	log.Printf("Primary forex conversion provider: %s.\n", bot.config.GetPrimaryForexProvider())
-	err = bot.config.RetrieveConfigCurrencyPairs(true)
+	log.Printf("Fiat display currency: %s.", bot.Config.Currency.FiatDisplayCurrency)
+	currency.BaseCurrency = bot.Config.Currency.FiatDisplayCurrency
+	currency.FXProviders = forexprovider.StartFXService(bot.Config.GetCurrencyConfig().ForexProviders)
+	log.Printf("Primary forex conversion provider: %s.\n", bot.Config.GetPrimaryForexProvider())
+	err = bot.Config.RetrieveConfigCurrencyPairs(true)
 	if err != nil {
 		log.Fatalf("Failed to retrieve config currency pairs. Error: %s", err)
 	}
@@ -105,22 +106,22 @@ func main() {
 		log.Fatalf("Unable to fetch forex data. Error: %s", err)
 	}
 
-	bot.portfolio = &portfolio.Portfolio
-	bot.portfolio.SeedPortfolio(bot.config.Portfolio)
+	bot.Portfolio = &portfolio.Portfolio
+	bot.Portfolio.SeedPortfolio(bot.Config.Portfolio)
 	SeedExchangeAccountInfo(GetAllEnabledExchangeAccountInfo().Data)
 
 	go portfolio.StartPortfolioWatcher()
 	go TickerUpdaterRoutine()
 	go OrderbookUpdaterRoutine()
 
-	if bot.config.Webserver.Enabled {
-		listenAddr := bot.config.Webserver.ListenAddress
+	if bot.Config.Webserver.Enabled {
+		listenAddr := bot.Config.Webserver.ListenAddress
 		log.Printf(
 			"HTTP Webserver support enabled. Listen URL: http://%s:%d/\n",
 			common.ExtractHost(listenAddr), common.ExtractPort(listenAddr),
 		)
 
-		router := NewRouter(bot.exchanges)
+		router := NewRouter(bot.Exchanges)
 		go func() {
 			err = http.ListenAndServe(listenAddr, router)
 			if err != nil {
@@ -135,7 +136,7 @@ func main() {
 		log.Println("HTTP RESTful Webserver support disabled.")
 	}
 
-	<-bot.shutdown
+	<-bot.Shutdown
 	Shutdown()
 }
 
@@ -169,7 +170,7 @@ func HandleInterrupt() {
 	go func() {
 		sig := <-c
 		log.Printf("Captured %v, shutdown requested.", sig)
-		bot.shutdown <- true
+		bot.Shutdown <- true
 	}()
 }
 
@@ -178,11 +179,11 @@ func Shutdown() {
 	log.Println("Bot shutting down..")
 
 	if len(portfolio.Portfolio.Addresses) != 0 {
-		bot.config.Portfolio = portfolio.Portfolio
+		bot.Config.Portfolio = portfolio.Portfolio
 	}
 
-	if !bot.dryRun {
-		err := bot.config.SaveConfig(bot.configFile)
+	if !bot.DryRun {
+		err := bot.Config.SaveConfig(bot.ConfigFile)
 
 		if err != nil {
 			log.Println("Unable to save config.")
